@@ -1,3 +1,4 @@
+import java.util.Iterator;
 import java.util.Stack;
 
 
@@ -15,45 +16,52 @@ public class mazepath {
 		Node End=Maze[8][8];
 		Node Position=Start;
 		do{
-			System.out.println("走到了"+Position.row+"  "+Position.col);
+			//System.out.println(Position.row+"  "+Position.col);
 			if(!Position.status){
 				MazeStack.push(Position);
 				Position.status=true;
-				//System.out.println("走到了"+Position.row+"  "+Position.col);
 				if(Position.equals(End)){
 					System.out.println("Get out！");
 					break;
 				}else{
 					Position.next=dir.down;
 					Position=Maze[Position.row][Position.col+1];
-					//System.out.println("走到了"+Position.row+"  "+Position.col);
 				}
 			}else{
-				//System.out.println("走到了"+Position.row+"  "+Position.col);
 				if(!MazeStack.isEmpty()&&(Position=(Node)MazeStack.peek()).next!=dir.right){
+					//System.out.println("此时的栈顶元素"+Position.row+"  "+Position.col);
 					//找到栈顶位置的下一相邻块
 					if(Position.next==dir.down){
 						Position.next=dir.left;
 						Position=Maze[Position.row+1][Position.col];
 					}
-					if(Position.next==dir.left){
+					else if(Position.next==dir.left){
 						Position.next=dir.up;Position=Maze[Position.row][Position.col-1];
 						
 					}
-					if(Position.next==dir.up){
+					else if(Position.next==dir.up){
 						Position.next=dir.right;Position=Maze[Position.row+1][Position.col];
 						
 					}
-					if(Position.next==dir.right){
+					else if(Position.next==dir.right){
 						Position.next=dir.down;Position=Maze[Position.row][Position.col+1];
 					}
 					
-				}else if(!MazeStack.isEmpty()&&(Position=(Node)MazeStack.peek()).next==dir.up){
+				}else if(!MazeStack.isEmpty()&&(Position=(Node)MazeStack.peek()).next==dir.right){
 					MazeStack.pop();
-					//Position=(Node)MazeStack.get(0);
+					//System.out.println("出栈的是"+Position.row+"  "+Position.col);
+					Position=(Node)MazeStack.peek();
 				}
 			}
 		}while(!MazeStack.isEmpty());
+		if(MazeStack.isEmpty())
+			System.out.println("该迷宫无解");
+		else{
+			System.out.println("栈中元素"+MazeStack.size());
+			for(int i=0;i<MazeStack.size();i++){
+				System.out.println(((Node)MazeStack.get(i)).row+" "+((Node)MazeStack.get(i)).col);
+			}
+		}
 	}
 	
 	public static void Init(){
